@@ -11,7 +11,7 @@
         <label for="status">Completed?: </label>
         <input type="checkbox" name="status" <% if (task.status) { %>checked<% } %> ><br/>
         <input type="text" name="notes" value="<%=task.notes%>"><br/>
-        <a href="/tracker" class="btn btn-secondary">Cancel</a>
+        <a href="/tracker/<%=task.id%>" class="btn btn-secondary">Cancel</a>
         <input type="submit" class="btn btn-success" value="Update">
     </div>
   </body>
