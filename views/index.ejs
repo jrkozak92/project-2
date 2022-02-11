@@ -16,8 +16,10 @@
         <% for ( let i = 0; i < tasks.length; i++){ %>
           <a href="/tracker/<%=tasks[i].id%>" class="task-link">
             <li class="task<% if (tasks[i].status){%>-complete<%}%>">
-              <%= tasks[i].name %>
-              <span class="task-note"><%=tasks[i].notes%></span>
+              <div class="list-flex">
+                <%= tasks[i].name %>
+                <div class="task-note"><%=tasks[i].notes%></div>
+              </div>
             </li>
           </a>
         <% } %>

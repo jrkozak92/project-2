@@ -6,11 +6,20 @@ body {
   padding: 2vmin 0;
 }
 
+.container-fluid {
+  display:flex;
+  flex-flow: column nowrap;
+  justify-content: flex-start;
+  align-items: baseline;
+  max-width: 1000px;
+}
+
 #top-bar, #button-bar {
   display:flex;
   flex-flow: row nowrap;
   justify-content: space-between;
   align-items: flex-end;
+  width:100%;
   margin-bottom:3vmin;
 }
 
@@ -20,6 +29,13 @@ body {
 
 #button-bar {
     margin-top:3vmin;
+    max-width:400px;
+}
+
+ul {
+  margin:0;
+  padding:0;
+  width:100%;
 }
 
 .task-link {
@@ -27,14 +43,47 @@ body {
   color:white;
 }
 
+.task-link:hover {
+  color:whitesmoke;
+  text-shadow:1px 1px rgb(100,100,100);
+}
+
 .task {
   list-style: inside circle;
+  margin:5px 0;
+  box-shadow:3px 3px 1px white;
+  border-radius:5px;
 }
 
 .task-complete {
   list-style: inside disc;
+  margin:5px 0;
+  box-shadow:1px 1px 1px white;
+  border-radius:5px;
 }
 
+.list-flex {
+  float:right;
+  display:flex;
+  flex-flow:row nowrap;
+  justify-content: flex-start;
+  align-items: baseline;
+  font-weight:bold;
+  min-width:0;
+  width:90%;
+}
+/* Found this at https://www.w3docs.com/snippets/css/how-to-limit-the-text-length-to-one-line-with-css.html#:~:text=If%20you%20want%20to%20limit,be%20signalled%20to%20the%20user. */
 .task-note {
+  display:inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0 10px;
+  font-weight:200;
+}
 
+textarea {
+  width:80vw;
+  height:3em;
+  max-width:400px;
 }
