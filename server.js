@@ -119,7 +119,7 @@ app.put('/tracker/:id', (req, res) => {
   // res.send(req.body)
   Task.findByIdAndUpdate(req.params.id, req.body, {new:true}, (err, update) => {
     console.log(update)
-    res.redirect('/tracker/' + req.params.id)
+    res.redirect('/tracker')
   })
 })
 
