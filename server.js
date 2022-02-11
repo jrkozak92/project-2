@@ -113,6 +113,8 @@ app.get('/tracker/:id/edit', (req, res) => {
 app.put('/tracker/:id', (req, res) => {
   if (req.body.status === "on"){
     req.body.status = true
+  } else {
+    req.body.status = false
   }
   // res.send(req.body)
   Task.findByIdAndUpdate(req.params.id, req.body, {new:true}, (err, update) => {

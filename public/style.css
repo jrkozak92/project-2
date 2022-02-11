@@ -1,0 +1,40 @@
+body {
+  color:white;
+  background-color:#2E3138;
+  height:100vh;
+  width:100%;
+  padding: 2vmin 0;
+}
+
+#top-bar, #button-bar {
+  display:flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom:3vmin;
+}
+
+#top-bar > * {
+  margin:0;
+}
+
+#button-bar {
+    margin-top:3vmin;
+}
+
+.task-link {
+  text-decoration:none;
+  color:white;
+}
+
+.task {
+  list-style: inside circle;
+}
+
+.task-complete {
+  list-style: inside disc;
+}
+
+.task-note {
+
+}

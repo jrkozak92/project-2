@@ -5,14 +5,18 @@
   </head>
   <body>
     <div class="container-fluid">
-      <h1>Edit Task: <%=task.name%></h1>
+      <div id="top-bar">
+        <h1>Edit Task: <%=task.name%></h1>
+      </div>
       <form action="/tracker/<%=task.id%>?_method=PUT" method="POST">
         <input type="text" name="name" value="<%=task.name%>"><br/>
         <label for="status">Completed?: </label>
         <input type="checkbox" name="status" <% if (task.status) { %>checked<% } %> ><br/>
         <input type="text" name="notes" value="<%=task.notes%>"><br/>
-        <a href="/tracker/<%=task.id%>" class="btn btn-secondary">Cancel</a>
-        <input type="submit" class="btn btn-success" value="Update">
+        <div id="button-bar">
+          <a href="/tracker/<%=task.id%>" class="btn btn-secondary">Cancel</a>
+          <input type="submit" class="btn btn-success" value="Update">
+        </div>
     </div>
   </body>
 </html>

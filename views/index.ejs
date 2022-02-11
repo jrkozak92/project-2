@@ -5,14 +5,19 @@
   </head>
   <body>
     <div class="container-fluid">
-      <h1>Tracker Home</h1>
-      <a href="/tracker/new"><button>Add Task</button></a>
+      <div id="top-bar">
+        <h1>Tracker Home</h1>
+        <a href="/tracker/new"><button class="btn btn-primary">Add Task</button></a>
+      </div>
+      <% if (tasks.length === 0){ %>
+          <p>There's nothing here...</p>
+      <% } %>
       <ul>
         <% for ( let i = 0; i < tasks.length; i++){ %>
-          <a href="/tracker/<%=tasks[i].id%>">
-            <li>
+          <a href="/tracker/<%=tasks[i].id%>" class="task-link">
+            <li class="task<% if (tasks[i].status){%>-complete<%}%>">
               <%= tasks[i].name %>
-              <span><%=tasks[i].notes%></span>
+              <span class="task-note"><%=tasks[i].notes%></span>
             </li>
           </a>
         <% } %>
