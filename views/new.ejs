@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <%- include('./partials/head') %>
+  </head>
+  <body>
+    <div class="container-fluid">
+      <h1>Create a New Daily Task</h1>
+      <form action="/tracker" method="POST">
+        <input type="text" name="name" placeholder="Name">
+        <input type="checkbox" name="status" hidden>
+        <input type="text" name="notes" placeholder="Notes">
+        <div>
+          <a href="/tracker" class="btn btn-secondary">Cancel</a>
+          <input type="submit" class="btn btn-success" value="Create">
+        </div>
+    </div>
+  </body>
+</html>

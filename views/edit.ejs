@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <%- include('./partials/head.ejs') %>
+  </head>
+  <body>
+    <div class="container-fluid">
+      <h1>Edit Task: <%=task.name%></h1>
+      <form action="/tracker/<%=task.id%>?_method=PUT" method="POST">
+        <input type="text" name="name" value="<%=task.name%>"><br/>
+        <label for="status">Completed?: </label>
+        <input type="checkbox" name="status" <% if (task.status) { %>checked<% } %> ><br/>
+        <input type="text" name="notes" value="<%=task.notes%>"><br/>
+        <a href="/tracker" class="btn btn-secondary">Cancel</a>
+        <input type="submit" class="btn btn-success" value="Update">
+    </div>
+  </body>
+</html>

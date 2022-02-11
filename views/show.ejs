@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <%- include('./partials/head.ejs') %>
+  </head>
+  <body>
+    <div class="container-fluid">
+      <h1>Tracker Task: <%=task.name%></h1>
+      <a href="/tracker" class="btn btn-primary">Go Home</a>
+      <p>Complete?: <%= task.status %></p>
+      <p>Notes: <%= task.notes %></p>
+      <form action="/tracker/<%=task.id%>?_method=DELETE" method="POST">
+        <input type="submit" class="btn btn-danger" value="Delete">
+      </form>
+      <a href="/tracker/<%=task.id%>/edit" class="btn btn-warning">Edit</a>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <%- include('./partials/head.ejs') %>
+  </head>
+  <body>
+    <div class="container-fluid">
+      <h1>Tracker Home</h1>
+      <a href="/tracker/new"><button>Add Task</button></a>
+      <ul>
+        <% for ( let i = 0; i < tasks.length; i++){ %>
+          <a href="/tracker/<%=tasks[i].id%>">
+            <li>
+              <%= tasks[i].name %>
+              <span><%=tasks[i].notes%></span>
+            </li>
+          </a>
+        <% } %>
+    </div>
+  </body>
+</html>

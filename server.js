@@ -7,6 +7,8 @@ const mongoose = require ('mongoose');
 const app = express ();
 const db = mongoose.connection;
 require('dotenv').config()
+const Task = require('./models/taskSchema.js')
+
 //___________________
 //Port
 //___________________
@@ -51,6 +53,81 @@ app.use(methodOverride('_method'));// allow POST, PUT and DELETE from a form
 app.get('/' , (req, res) => {
   res.send('Hello World!');
 });
+//___________________
+//  Tracker
+//___________________
+
+//Index: /tracker/
+app.get('/tracker', (req, res) => {
+  Task.find({}, (err, tasks) => {
+    res.render('index.ejs',
+      {
+        title: 'Tracker | Home',
+        tasks: tasks
+      })
+  })
+
+})
+
+//New: /tracker/new
+app.get('/tracker/new', (req, res) => {
+  res.render('new.ejs',
+    {
+      title: 'Tracker | Add'
+    })
+})
+
+//Create: /tracker
+app.post('/tracker', (req, res) => {
+  Task.create(req.body, (err, task) => {
+    console.log(task)
+    res.redirect('/tracker')
+  })
+})
+
+//Show: /tracker/:id
+app.get('/tracker/:id', (req, res) => {
+  Task.findById(req.params.id, (err, task) => {
+    res.render('show.ejs',
+      {
+        title: 'Tracker | Item',
+        task: task
+      })
+    })
+  }
+)
+
+//Edit: /tracker/:id/edit
+app.get('/tracker/:id/edit', (req, res) => {
+  Task.findById(req.params.id, (err, task) => {
+    res.render('edit.ejs',
+      {
+        title: 'Tracker | Edit',
+        task: task
+      })
+    })
+  }
+)
+
+//Update: /tracker/:id
+app.put('/tracker/:id', (req, res) => {
+  if (req.body.status === "on"){
+    req.body.status = true
+  }
+  // res.send(req.body)
+  Task.findByIdAndUpdate(req.params.id, req.body, {new:true}, (err, update) => {
+    console.log(update)
+    res.redirect('/tracker/' + req.params.id)
+  })
+})
+
+//Delete: /tracker/:id
+app.delete('/tracker/:id', (req, res) => {
+  Task.findByIdAndRemove(req.params.id, (err, removedTask) => {
+    console.log(removedTask)
+    res.redirect('/tracker')
+  })
+})
 
 //___________________
 //Listener
