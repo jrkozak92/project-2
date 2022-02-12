@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <%- include('../partials/head.ejs') %>
+  </head>
+  <body>
+    <div class="container-fluid">
+      <div id="top-bar">
+        <h1>Share Info</h1>
+        <a href="/share" class="btn btn-primary">Go Home</a>
+      </div>
+      <img src="data:img/<%=share.img.contentType%>;base64,<%=share.img.data.toString('base64')%>"><br/>
+      <%= share.title %><br/>
+      <%= share.content %>
+      <div id="button-bar">
+        <form action="/share/<%=share.id%>?_method=DELETE" method="POST">
+          <input type="submit" class="btn btn-danger" value="Delete">
+        </form>
+        <a href="/share/<%=share.id%>/edit" class="btn btn-warning">Edit</a>
+      </div>
+    </div>
+  </body>
+</html>

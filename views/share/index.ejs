@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <%- include('../partials/head.ejs') %>
+  </head>
+  <body>
+    <div class="container-fluid">
+      <div id="top-bar">
+        <h1>Share Home</h1>
+        <a href="/share/new"><button class="btn btn-primary">Share</button></a>
+      </div>
+      <% if (shares.length === 0){ %>
+          <p>There's nothing here...</p>
+      <% } %>
+      <% for ( let i = 0; i < shares.length; i++){ %>
+        <a href="/share/<%=shares[i].id%>" class="share-link">
+            <figure class="card">
+              <img src="data:img/<%=shares[i].img.contentType%>;base64,<%=shares[i].img.data.toString('base64')%>">
+              <figcaption>
+                <%= shares[i].title %><br/>
+                <%=shares[i].content%>
+              </figcaption>
+            </figure>
+        </a>
+      <% } %>
+    </div>
+    <nav>
+      <ul id="nav-list">
+        <li class="nav-item"><a href="/tracker">Tracker</a></li>
+        <li class="nav-item"><a href="/share">Share</a></li>
+        <li class="nav-item"><a href="/tracker">Lost & Found</a></li>
+      </ul>
+    </nav>
+  </body>
+</html>
