@@ -214,8 +214,24 @@ app.get('/share/:id/edit', (req, res) => {
 )
 
 //Update: /share/:id
-app.put('/share/:id', (req, res) => {
-  Share.findByIdAndUpdate(req.params.id, req.body, {new:true}, (err, update) => {
+app.put('/share/:id', upload.single('img'), (req, res) => {
+  let shareObj = undefined
+  if (req.file) {
+    shareObj = {
+    title: req.body.title,
+    content: req.body.content,
+    img: {
+      data: fs.readFileSync(path.join('./public/uploads/' + req.file.filename)),
+      contentType: 'image/png'
+      }
+    }
+  } else {
+    shareObj = {
+      title: req.body.title,
+      content: req.body.content
+    }
+  }
+  Share.findByIdAndUpdate(req.params.id, shareObj, {new:true}, (err, update) => {
     console.log(update)
     res.redirect('/share')
   })
@@ -223,10 +239,10 @@ app.put('/share/:id', (req, res) => {
 
 //Delete: /share/:id
 app.delete('/share/:id', (req, res) => {
-  // Share.findByIdAndRemove(req.params.id, (err, removedShare) => {
-  //   console.log(removedShare)
-  //   res.redirect('/share')
-  // })
+  Share.findByIdAndRemove(req.params.id, (err, removedShare) => {
+    console.log(removedShare)
+    res.redirect('/share')
+  })
 })
 
 
