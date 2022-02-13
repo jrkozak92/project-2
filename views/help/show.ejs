@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <%- include('../partials/head.ejs') %>
+  </head>
+  <body>
+    <div class="container-fluid">
+      <div id="top-bar">
+        <h1>Post Info</h1>
+        <a href="/help" class="btn btn-primary">Go Home</a>
+      </div>
+      <div id="card-container">
+        <% if (post.img.path) {
+          if (!post.img.converted) {%>
+            <img src="data:image/<%=post.img.contentType%>;base64,<%=post.img.data.toString('base64')%>">
+          <% } else {%>
+            <img src="<%=post.img.path.slice(6)%>.png">
+          <% } %>
+        <% } %>
+        <%= post.title %><br/>
+        <%= post.content %>
+      </div>
+      <div id="button-bar">
+        <form action="/help/<%=post.id%>?_method=DELETE" method="POST">
+          <input type="submit" class="btn btn-danger" value="Delete">
+        </form>
+        <a href="/help/<%=post.id%>/edit" class="btn btn-warning">Edit</a>
+      </div>
+    </div>
+  </body>
+</html>

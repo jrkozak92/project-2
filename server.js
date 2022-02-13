@@ -9,6 +9,7 @@ const db = mongoose.connection;
 require('dotenv').config()
 const Task = require('./models/taskSchema.js')
 const Share = require('./models/shareSchema.js')
+const Post = require('./models/postSchema.js')
 const { promisify } = require('util')
 const convert = require('heic-convert')
 
@@ -310,6 +311,168 @@ app.delete('/share/:id', (req, res) => {
     }
   })
 })
+
+
+//___________________
+//  Help
+//___________________
+
+//Index: /help/
+app.get('/help', (req, res) => {
+  Post.find({}, (err, posts) => {
+    res.render('./help/index.ejs',
+      {
+        title: 'Lost & Found | Home',
+        posts: posts
+      })
+  })
+})
+
+//New: /help/new
+app.get('/help/new', (req, res) => {
+  res.render('./help/new.ejs',
+    {
+      title: 'Lost & Found | Add'
+    })
+})
+// Got Image handling here: https://www.geeksforgeeks.org/upload-and-retrieve-image-on-mongodb-using-mongoose/
+// Got HEIC handling here: https://www.npmjs.com/package/heic-convert
+//Create: /help
+app.post('/help', upload.single('img'), (req, res, next) => {
+  let shareObj = undefined
+  if (req.file) {
+    let mimeShare = req.file.mimetype
+    shareObj = {
+      title: req.body.title,
+      content: req.body.content,
+      img: {
+        data: fs.readFileSync(path.join('./public/uploads/' + req.file.filename)),
+        contentType: mimeShare,
+        path: req.file.path
+      }
+    }
+    if (mimeShare === 'image/heic'){
+      //run convert on data and update mimeShare
+      console.log('If HEIC hit');
+      (async () => {
+        const inputBuffer = await promisify(fs.readFile)(path.join('./public/uploads/' + req.file.filename))
+        const outputBuffer = await convert({
+          buffer: inputBuffer,
+          format: 'PNG'
+        })
+
+        await promisify(fs.writeFile)(shareObj.img.path + '.png', outputBuffer)
+        shareObj.img.data = outputBuffer
+        fs.unlink(shareObj.img.path, () => {})
+      })()
+      shareObj.img.converted = true
+      shareObj.img.contentType = 'image/png'
+    }
+  } else {
+    shareObj = {
+      title: req.body.title,
+      content: req.body.content
+    }
+  }
+  Post.create(shareObj, (err, post) => {
+    res.redirect('/help')
+  })
+})
+
+//Show: /help/:id
+app.get('/help/:id', (req, res) => {
+  Post.findById(req.params.id, (err, post) => {
+    res.render('./help/show.ejs',
+      {
+        title: 'Lost & Found | Post',
+        post: post
+      })
+    })
+  }
+)
+
+//Edit: /help/:id/edit
+app.get('/help/:id/edit', (req, res) => {
+  Post.findById(req.params.id, (err, post) => {
+    res.render('./help/edit.ejs',
+      {
+        title: 'Lost & Found | Edit',
+        post: post
+      })
+    })
+  }
+)
+
+//Update: /help/:id
+app.put('/help/:id', upload.single('img'), (req, res) => {
+  let shareObj = undefined
+  if (req.file) {
+    let mimeShare = req.file.mimetype
+    shareObj = {
+      title: req.body.title,
+      content: req.body.content,
+      img: {
+        data: fs.readFileSync(path.join('./public/uploads/' + req.file.filename)),
+        contentType: mimeShare,
+        path: req.file.path,
+        converted:false
+      }
+    }
+    if (mimeShare === 'image/heic'){
+      //run convert on data and update mimeShare
+      console.log('If HEIC hit');
+      (async () => {
+        const inputBuffer = await promisify(fs.readFile)(path.join('./public/uploads/' + req.file.filename))
+        const outputBuffer = await convert({
+          buffer: inputBuffer,
+          format: 'PNG'
+        })
+
+        await promisify(fs.writeFile)(shareObj.img.path + '.png', outputBuffer)
+        shareObj.img.data = outputBuffer
+        fs.unlink(shareObj.img.path, () => {})
+      })()
+      shareObj.img.converted = true
+      shareObj.img.contentType = 'image/png'
+    }
+  } else {
+    shareObj = {
+      title: req.body.title,
+      content: req.body.content
+    }
+  }
+  // This handles all cases except removing an image and converting to text-only
+  // could handle this with another check box or something
+  Post.findByIdAndUpdate(req.params.id, shareObj, {new:false}, (err, update) => {
+    if (update.img.converted === true) {
+      fs.unlink(update.img.path + '.png', () => {
+        res.redirect('/help')
+      })
+    } else {
+      fs.unlink(update.img.path, () => {
+        res.redirect('/help')
+      })
+    }
+  })
+})
+
+//Delete: /help/:id
+app.delete('/help/:id', (req, res) => {
+  Post.findByIdAndRemove(req.params.id, (err, removedPost) => {
+    console.log(removedPost)
+    if (removedPost.img.converted === true){
+      fs.unlink(removedPost.img.path + '.png', () => {
+        res.redirect('/help')
+      })
+    } else {
+      fs.unlink(removedPost.img.path, () => {
+        res.redirect('/help')
+      })
+    }
+  })
+})
+
+
 
 
 //___________________

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <%- include('../partials/head.ejs') %>
+  </head>
+  <body>
+    <div class="container-fluid">
+      <div id="top-bar">
+        <h1>Edit Post</h1>
+      </div>
+      <form action="/help/<%=post.id%>?_method=PUT" method="POST" enctype="multipart/form-data">
+        <input type="text" name="title" value="<%=post.title%>" required><br/>
+        <textarea name="content"><%=post.content%></textarea>
+        <input type="file" class="form-control" name="img" value="">
+        <div id="button-bar">
+          <a href="/help" class="btn btn-secondary">Cancel</a>
+          <input type="submit" class="btn btn-success" value="Update">
+        </div>
+      </form>
+    </div>
+  </body>
+</html>
