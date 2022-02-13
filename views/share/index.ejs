@@ -16,7 +16,13 @@
       <% for ( let i = 0; i < shares.length; i++){ %>
         <a href="/share/<%=shares[i].id%>" class="share-link">
             <figure class="card">
-              <img src="data:img/<%=shares[i].img.contentType%>;base64,<%=shares[i].img.data.toString('base64')%>">
+              <% if (shares[i].img.path) {
+                if (!shares[i].img.converted) {%>
+                  <img src="data:image/<%=shares[i].img.contentType%>;base64,<%=shares[i].img.data.toString('base64')%>">
+                <% } else {%>
+                  <img src="<%=shares[i].img.path.slice(6)%>.png">
+                <% } %>
+              <% } %>
               <figcaption>
                 <%= shares[i].title %><br/>
                 <%=shares[i].content%>

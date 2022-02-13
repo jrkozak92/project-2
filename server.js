@@ -9,6 +9,9 @@ const db = mongoose.connection;
 require('dotenv').config()
 const Task = require('./models/taskSchema.js')
 const Share = require('./models/shareSchema.js')
+const { promisify } = require('util')
+const convert = require('heic-convert')
+
 //Node Modules
 const fs = require('fs')
 const path = require('path')
@@ -177,14 +180,32 @@ app.get('/share/new', (req, res) => {
 app.post('/share', upload.single('img'), (req, res, next) => {
   let shareObj = undefined
   if (req.file) {
+    let mimeShare = req.file.mimetype
     shareObj = {
       title: req.body.title,
       content: req.body.content,
       img: {
         data: fs.readFileSync(path.join('./public/uploads/' + req.file.filename)),
-        contentType: req.file.mimetype,
+        contentType: mimeShare,
         path: req.file.path
       }
+    }
+    if (mimeShare === 'image/heic'){
+      //run convert on data and update mimeShare
+      console.log('If HEIC hit');
+      (async () => {
+        const inputBuffer = await promisify(fs.readFile)(path.join('./public/uploads/' + req.file.filename))
+        const outputBuffer = await convert({
+          buffer: inputBuffer,
+          format: 'PNG'
+        })
+
+        await promisify(fs.writeFile)(shareObj.img.path + '.png', outputBuffer)
+        shareObj.img.data = outputBuffer
+        fs.unlink(shareObj.img.path, () => {})
+      })()
+      shareObj.img.converted = true
+      shareObj.img.contentType = 'image/png'
     }
   } else {
     shareObj = {
@@ -192,9 +213,7 @@ app.post('/share', upload.single('img'), (req, res, next) => {
       content: req.body.content
     }
   }
-  console.log('Share Object: ', shareObj);
   Share.create(shareObj, (err, share) => {
-    console.log(share)
     res.redirect('/share')
   })
 })
@@ -227,14 +246,33 @@ app.get('/share/:id/edit', (req, res) => {
 app.put('/share/:id', upload.single('img'), (req, res) => {
   let shareObj = undefined
   if (req.file) {
+    let mimeShare = req.file.mimetype
     shareObj = {
-    title: req.body.title,
-    content: req.body.content,
-    img: {
-      data: fs.readFileSync(path.join('./public/uploads/' + req.file.filename)),
-      contentType: req.file.mimetype,
-      path: req.file.path
+      title: req.body.title,
+      content: req.body.content,
+      img: {
+        data: fs.readFileSync(path.join('./public/uploads/' + req.file.filename)),
+        contentType: mimeShare,
+        path: req.file.path,
+        converted:false
       }
+    }
+    if (mimeShare === 'image/heic'){
+      //run convert on data and update mimeShare
+      console.log('If HEIC hit');
+      (async () => {
+        const inputBuffer = await promisify(fs.readFile)(path.join('./public/uploads/' + req.file.filename))
+        const outputBuffer = await convert({
+          buffer: inputBuffer,
+          format: 'PNG'
+        })
+
+        await promisify(fs.writeFile)(shareObj.img.path + '.png', outputBuffer)
+        shareObj.img.data = outputBuffer
+        fs.unlink(shareObj.img.path, () => {})
+      })()
+      shareObj.img.converted = true
+      shareObj.img.contentType = 'image/png'
     }
   } else {
     shareObj = {
@@ -242,11 +280,18 @@ app.put('/share/:id', upload.single('img'), (req, res) => {
       content: req.body.content
     }
   }
+  // This handles all cases except removing an image and converting to text-only
+  // could handle this with another check box or something
   Share.findByIdAndUpdate(req.params.id, shareObj, {new:false}, (err, update) => {
-    fs.unlink(update.img.path, () => {
-      console.log(update)
-      res.redirect('/share')
-    })
+    if (update.img.converted === true) {
+      fs.unlink(update.img.path + '.png', () => {
+        res.redirect('/share')
+      })
+    } else {
+      fs.unlink(update.img.path, () => {
+        res.redirect('/share')
+      })
+    }
   })
 })
 
@@ -254,12 +299,17 @@ app.put('/share/:id', upload.single('img'), (req, res) => {
 app.delete('/share/:id', (req, res) => {
   Share.findByIdAndRemove(req.params.id, (err, removedShare) => {
     console.log(removedShare)
-    fs.unlink(removedShare.img.path, () => {
-      res.redirect('/share')
-    })
+    if (removedShare.img.converted === true){
+      fs.unlink(removedShare.img.path + '.png', () => {
+        res.redirect('/share')
+      })
+    } else {
+      fs.unlink(removedShare.img.path, () => {
+        res.redirect('/share')
+      })
+    }
   })
 })
-
 
 
 //___________________

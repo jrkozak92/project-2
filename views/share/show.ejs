@@ -10,7 +10,13 @@
         <a href="/share" class="btn btn-primary">Go Home</a>
       </div>
       <div id="card-container">
-        <img src="data:img/<%=share.img.contentType%>;base64,<%=share.img.data.toString('base64')%>"><br/>
+        <% if (share.img.path) {
+          if (!share.img.converted) {%>
+            <img src="data:image/<%=share.img.contentType%>;base64,<%=share.img.data.toString('base64')%>">
+          <% } else {%>
+            <img src="<%=share.img.path.slice(6)%>.png">
+          <% } %>
+        <% } %>
         <%= share.title %><br/>
         <%= share.content %>
       </div>
