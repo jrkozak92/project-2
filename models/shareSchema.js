@@ -5,7 +5,8 @@ const shareSchema = new mongoose.Schema({
   content: String,
   img: {
     data: Buffer,
-    contentType: String
+    contentType: String,
+    path: String
   },
   comments: [
     {text: String,

@@ -172,14 +172,24 @@ app.get('/share/new', (req, res) => {
     })
 })
 // Got Image handling here: https://www.geeksforgeeks.org/upload-and-retrieve-image-on-mongodb-using-mongoose/
+// Got HEIC handling here: https://www.npmjs.com/package/heic-convert
 //Create: /share
 app.post('/share', upload.single('img'), (req, res, next) => {
-  let shareObj = {
-    title: req.body.title,
-    content: req.body.content,
-    img: {
-      data: fs.readFileSync(path.join('./public/uploads/' + req.file.filename)),
-      contentType: 'image/png'
+  let shareObj = undefined
+  if (req.file) {
+    shareObj = {
+      title: req.body.title,
+      content: req.body.content,
+      img: {
+        data: fs.readFileSync(path.join('./public/uploads/' + req.file.filename)),
+        contentType: req.file.mimetype,
+        path: req.file.path
+      }
+    }
+  } else {
+    shareObj = {
+      title: req.body.title,
+      content: req.body.content
     }
   }
   console.log('Share Object: ', shareObj);
@@ -222,7 +232,8 @@ app.put('/share/:id', upload.single('img'), (req, res) => {
     content: req.body.content,
     img: {
       data: fs.readFileSync(path.join('./public/uploads/' + req.file.filename)),
-      contentType: 'image/png'
+      contentType: req.file.mimetype,
+      path: req.file.path
       }
     }
   } else {
@@ -231,9 +242,11 @@ app.put('/share/:id', upload.single('img'), (req, res) => {
       content: req.body.content
     }
   }
-  Share.findByIdAndUpdate(req.params.id, shareObj, {new:true}, (err, update) => {
-    console.log(update)
-    res.redirect('/share')
+  Share.findByIdAndUpdate(req.params.id, shareObj, {new:false}, (err, update) => {
+    fs.unlink(update.img.path, () => {
+      console.log(update)
+      res.redirect('/share')
+    })
   })
 })
 
@@ -241,7 +254,9 @@ app.put('/share/:id', upload.single('img'), (req, res) => {
 app.delete('/share/:id', (req, res) => {
   Share.findByIdAndRemove(req.params.id, (err, removedShare) => {
     console.log(removedShare)
-    res.redirect('/share')
+    fs.unlink(removedShare.img.path, () => {
+      res.redirect('/share')
+    })
   })
 })
 

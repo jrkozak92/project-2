@@ -9,9 +9,11 @@
         <h1>Share Info</h1>
         <a href="/share" class="btn btn-primary">Go Home</a>
       </div>
-      <img src="data:img/<%=share.img.contentType%>;base64,<%=share.img.data.toString('base64')%>"><br/>
-      <%= share.title %><br/>
-      <%= share.content %>
+      <div id="card-container">
+        <img src="data:img/<%=share.img.contentType%>;base64,<%=share.img.data.toString('base64')%>"><br/>
+        <%= share.title %><br/>
+        <%= share.content %>
+      </div>
       <div id="button-bar">
         <form action="/share/<%=share.id%>?_method=DELETE" method="POST">
           <input type="submit" class="btn btn-danger" value="Delete">
