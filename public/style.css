@@ -178,3 +178,11 @@ textarea {
   width:88vw;
   max-width:900px;
 }
+
+.lost{
+  background-color:#856A5D;
+}
+
+.found {
+  background-color:#F9C784;
+}
