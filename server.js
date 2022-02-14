@@ -246,6 +246,7 @@ app.get('/share/:id/edit', (req, res) => {
 //Update: /share/:id
 app.put('/share/:id', upload.single('img'), (req, res) => {
   let shareObj = undefined
+  let imgMod = false
   if (req.file) {
     let mimeShare = req.file.mimetype
     shareObj = {
@@ -284,14 +285,18 @@ app.put('/share/:id', upload.single('img'), (req, res) => {
   // This handles all cases except removing an image and converting to text-only
   // could handle this with another check box or something
   Share.findByIdAndUpdate(req.params.id, shareObj, {new:false}, (err, update) => {
-    if (update.img.converted === true) {
-      fs.unlink(update.img.path + '.png', () => {
-        res.redirect('/share')
-      })
+    if (imgMod) {
+      if (update.img.converted === true) {
+        fs.unlink(update.img.path + '.png', () => {
+          res.redirect('/share')
+        })
+      } else {
+        fs.unlink(update.img.path, () => {
+          res.redirect('/share')
+        })
+      }
     } else {
-      fs.unlink(update.img.path, () => {
-        res.redirect('/share')
-      })
+      res.redirect('/share')
     }
   })
 })
