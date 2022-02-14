@@ -261,7 +261,6 @@ app.put('/share/:id', upload.single('img'), (req, res) => {
     }
     if (mimeShare === 'image/heic'){
       //run convert on data and update mimeShare
-      console.log('If HEIC hit');
       (async () => {
         const inputBuffer = await promisify(fs.readFile)(path.join('./public/uploads/' + req.file.filename))
         const outputBuffer = await convert({
@@ -309,10 +308,12 @@ app.delete('/share/:id', (req, res) => {
       fs.unlink(removedShare.img.path + '.png', () => {
         res.redirect('/share')
       })
-    } else {
+    } else if (removedShare.img.path !== undefined){
       fs.unlink(removedShare.img.path, () => {
         res.redirect('/share')
       })
+    } else {
+      res.redirect('/share')
     }
   })
 })
@@ -462,7 +463,6 @@ app.put('/help/:id', upload.single('img'), (req, res) => {
     }
     if (mimeShare === 'image/heic'){
       //run convert on data and update mimeShare
-      console.log('If HEIC hit');
       (async () => {
         const inputBuffer = await promisify(fs.readFile)(path.join('./public/uploads/' + req.file.filename))
         const outputBuffer = await convert({
