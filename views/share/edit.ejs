@@ -9,7 +9,7 @@
         <h1>Edit Share</h1>
       </div>
       <form action="/share/<%=share.id%>?_method=PUT" method="POST" enctype="multipart/form-data">
-        <input type="text" name="title" value="<%=share.title%>" required><br/>
+        <input type="text" id="title" name="title" value="<%=share.title%>" required><br/>
         <textarea name="content"><%=share.content%></textarea>
         <input type="file" class="form-control" name="img" value="">
         <div id="button-bar">

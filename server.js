@@ -332,7 +332,17 @@ app.get('/help', (req, res) => {
 app.get('/help/new', (req, res) => {
   res.render('./help/new.ejs',
     {
-      title: 'Lost & Found | Add'
+      title: 'Lost & Found | Add',
+      // radioMessage: '',
+      // radioType: () => {
+      //  let radioMessage
+      //  if (document.getElementById('lost').checked) {
+      //      radioMessage = 'Please share as much detail as possible about your pet and where it was last seen.'
+      //    } else {
+      //      readioMessage = 'Please share as much detail as possible aobut the pet and where it was found.'
+      //    }
+      //    return radioMessage
+      //  }
     })
 })
 // Got Image handling here: https://www.geeksforgeeks.org/upload-and-retrieve-image-on-mongodb-using-mongoose/
@@ -345,6 +355,7 @@ app.post('/help', upload.single('img'), (req, res, next) => {
     shareObj = {
       title: req.body.title,
       content: req.body.content,
+      type: req.body.type,
       img: {
         data: fs.readFileSync(path.join('./public/uploads/' + req.file.filename)),
         contentType: mimeShare,
@@ -371,7 +382,8 @@ app.post('/help', upload.single('img'), (req, res, next) => {
   } else {
     shareObj = {
       title: req.body.title,
-      content: req.body.content
+      content: req.body.content,
+      type: req.body.type
     }
   }
   Post.create(shareObj, (err, post) => {
@@ -403,14 +415,39 @@ app.get('/help/:id/edit', (req, res) => {
   }
 )
 
+//Comment: /help/:id/comment
+app.get('/help/:id/comment', (req, res) => {
+  Post.findById(req.params.id, (err, post) => {
+    res.render('./help/comment.ejs',
+      {
+        title: 'Lost & Found | Comment',
+        post: post
+      })
+  })
+})
+ //Add new comment:
+ //Found help here: https://stackoverflow.com/questions/33049707/push-items-into-mongo-array-via-mongoose#:~:text=Use%20%24push%20to%20update%20document,new%20value%20inside%20an%20array.&text=Another%20way%20to%20push%20items,to%20be%20pushed%20into%20array.
+app.put('/help/:id/addComment', (req, res) => {
+  let now = new Date(Date.now());
+  now = now.toString().slice(0,-36)
+  let newComment = {$push: {comments: {text: req.body.newComment, date:now}}}
+  // res.send(req.body)
+  Post.findByIdAndUpdate(req.params.id, newComment, (err, post) => {
+    res.redirect('/help/' + post.id)
+  })
+})
+
 //Update: /help/:id
 app.put('/help/:id', upload.single('img'), (req, res) => {
   let shareObj = undefined
+  let imgMod = false
   if (req.file) {
+    imgMod = true
     let mimeShare = req.file.mimetype
     shareObj = {
       title: req.body.title,
       content: req.body.content,
+      type: req.body.type,
       img: {
         data: fs.readFileSync(path.join('./public/uploads/' + req.file.filename)),
         contentType: mimeShare,
@@ -438,21 +475,27 @@ app.put('/help/:id', upload.single('img'), (req, res) => {
   } else {
     shareObj = {
       title: req.body.title,
-      content: req.body.content
+      content: req.body.content,
+      type: req.body.type
     }
   }
   // This handles all cases except removing an image and converting to text-only
   // could handle this with another check box or something
   Post.findByIdAndUpdate(req.params.id, shareObj, {new:false}, (err, update) => {
-    if (update.img.converted === true) {
-      fs.unlink(update.img.path + '.png', () => {
-        res.redirect('/help')
-      })
+    if (imgMod) {
+      if (update.img.converted === true) {
+        fs.unlink(update.img.path + '.png', () => {
+          res.redirect('/help')
+        })
+      } else {
+        fs.unlink(update.img.path, () => {
+          res.redirect('/help')
+        })
+      }
     } else {
-      fs.unlink(update.img.path, () => {
-        res.redirect('/help')
-      })
+      res.redirect('/help')
     }
+
   })
 })
 
@@ -464,16 +507,27 @@ app.delete('/help/:id', (req, res) => {
       fs.unlink(removedPost.img.path + '.png', () => {
         res.redirect('/help')
       })
-    } else {
+    } else if (removedPost.img.path !== undefined){
       fs.unlink(removedPost.img.path, () => {
         res.redirect('/help')
       })
+    } else {
+      res.redirect('/help')
     }
   })
 })
 
-
-
+//Delete Comment: /help/:id/comment/:id
+app.delete('/help/:id/comment/:commentId', (req, res) => {
+  Post.findById(req.params.id, (err, post) => {
+    async function removeComment(){
+      post.comments.id(req.params.commentId).remove()
+      await post.save({w: 1, j: true})
+      res.redirect('/help/' + req.params.id)
+    }
+    removeComment()
+  })
+})
 
 //___________________
 //Listener

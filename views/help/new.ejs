@@ -7,8 +7,15 @@
     <div class="container-fluid">
       <h1>Create a New Post</h1>
       <form action="/help" method="POST" enctype="multipart/form-data">
-        <input type="text" name="title" placeholder="Title" required><br/>
-        <textarea name="content" placeholder="What would you like to share?"></textarea>
+        <input type="text" id="title" name="title" placeholder="Title" required><br/>
+        <div id="radio-select">
+          Type of Post:<br/>
+          <label for="lost" name="type" value="Lost Pet">Lost Pet</label>
+          <input type="radio" id="lost" name="type" value="lost" checked required>
+          <label for="found" name="type" value="Found Pet">Found Pet</label>
+          <input type="radio" id="found" name="type" value="found" required><br/>
+        </div>
+        <textarea class= "pet-info" name="content" placeholder="Please share as much detail as possible about the pet and where it was last seen."></textarea>
         <input type="file" class="form-control" name="img" value="">
         <div id="button-bar">
           <a href="/help" class="btn btn-secondary">Cancel</a>

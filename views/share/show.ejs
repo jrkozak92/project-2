@@ -19,6 +19,12 @@
         <% } %>
         <%= share.title %><br/>
         <%= share.content %>
+        <% share.comments.forEach((comment) => { %>
+          <div class="comment-container">
+            <p>On <%= comment.date %></p>
+            <p> <%= comment.text %></p>
+          </div>
+        <% }) %>
       </div>
       <div id="button-bar">
         <form action="/share/<%=share.id%>?_method=DELETE" method="POST">

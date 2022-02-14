@@ -9,7 +9,7 @@
         <h1>Edit Task: <%=task.name%></h1>
       </div>
       <form action="/tracker/<%=task.id%>?_method=PUT" method="POST">
-        <input type="text" name="name" value="<%=task.name%>"><br/>
+        <input type="text" id="title" name="name" value="<%=task.name%>"><br/>
         <label for="status">Completed?: </label>
         <input type="checkbox" name="status" <% if (task.status) { %>checked<% } %> ><br/>
         <textarea name="notes"><%=task.notes%></textarea><br/>

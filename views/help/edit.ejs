@@ -9,7 +9,14 @@
         <h1>Edit Post</h1>
       </div>
       <form action="/help/<%=post.id%>?_method=PUT" method="POST" enctype="multipart/form-data">
-        <input type="text" name="title" value="<%=post.title%>" required><br/>
+        <input type="text" id="title" name="title" value="<%=post.title%>" required><br/>
+        <div id="radio-select">
+          Type of Post:<br/>
+          <label for="lost" name="type" value="Lost Pet">Lost Pet</label>
+          <input type="radio" id="lost" name="type" value="lost" <% if (post.type === 'lost'){ %>checked<% } %> required>
+          <label for="found" name="type" value="Found Pet">Found Pet</label>
+          <input type="radio" id="found" name="type" value="found" <% if (post.type === 'found'){ %>checked<% } %> required><br/>
+        </div>
         <textarea name="content"><%=post.content%></textarea>
         <input type="file" class="form-control" name="img" value="">
         <div id="button-bar">

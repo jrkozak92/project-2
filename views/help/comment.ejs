@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <%- include('../partials/head.ejs') %>
+  </head>
+  <body>
+    <h1>New Comment on <%= post.title %></h1>
+    <form action="/help/<%=post.id%>/addComment?_method=PUT" method="POST">
+      <textarea name="newComment" placeholder="Add your comment here"></textarea>
+      <div id="button-bar">
+        <a href="/help/<%= post.id%>" class="btn btn-secondary">Cancel</a>
+        <input type="submit" id="button-form" class="btn btn-success" value="Add">
+      </div>
+    </form>
+  </body>
+</html>
