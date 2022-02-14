@@ -186,3 +186,14 @@ textarea {
 .found {
   background-color:#F9C784;
 }
+
+#map-link {
+  position:absolute;
+  right:10px;
+  bottom:100px;
+}
+
+#map {
+  height:calc( 100% - 2em - 8px );
+  width:100%;
+}

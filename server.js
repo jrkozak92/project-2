@@ -334,6 +334,16 @@ app.get('/help', (req, res) => {
   })
 })
 
+app.get('/help/map', (req, res) => {
+  Post.find({}, (err, posts) => {
+    res.render('./help/map.ejs',
+      {
+        title: 'Lost & Found | Map',
+        posts: posts
+      })
+  })
+})
+
 //New: /help/new
 app.get('/help/new', (req, res) => {
   res.render('./help/new.ejs',
@@ -533,6 +543,9 @@ app.delete('/help/:id/comment/:commentId', (req, res) => {
     removeComment()
   })
 })
+
+
+
 
 //___________________
 //Listener
