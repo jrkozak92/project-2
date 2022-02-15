@@ -4,21 +4,92 @@
     <%- include('../partials/head.ejs') %>
   </head>
   <body>
-    <h1>Map View</h1>
+    <div id="top-bar">
+      <h1>Map View</h1>
+      <a href="/help" class="btn btn-info">Post View</a>
+    </div>
     <div id="map"></div>
     <!-- All Maps stuff comes from google's docs or this video: https://www.youtube.com/watch?v=Zxf1mnP5zcw&t=744s -->
     <script>
       var map;
+      var newMarker;
       function initMap(){
         map = new google.maps.Map(document.getElementById('map'),
         {
           zoom: 12,
           center: {lat:29.7604, lng:-95.3698}
         });
-        var marker = new google.maps.Marker({
-          position: {lat:29.7794844512672,lng:-95.41349265301973},
-          map: map
+        <%# Inspired by: https://stackoverflow.com/questions/34827994/how-to-get-only-one-marker-in-the-google-maps-api-with-javascript?rq=1 %>
+        google.maps.event.addListener(map, 'click', function(event){
+          placeMarker({coords: event.latLng});
         });
+        <%# for each post, create var image[i] with below logic%>
+        var image0 = {
+          url: <% if (posts[0].img.path) {
+                if (!posts[0].img.converted) {%>
+                  "<%=posts[0].img.path.slice(6)%>.<%=posts[0].img.contentType.slice(-4)%>"
+                <% } else {%>
+                  "<%=posts[0].img.path.slice(6)%>.png"
+                <% } %>
+              <% } %>,
+          size: new google.maps.Size(50, 50),
+          scaledSize: new google.maps.Size(25, 25)
+        };
+        var markers = [
+          {
+            coords: {lat:29.7794844512672,lng:-95.41349265301973},
+            iconImage: image0,
+            content: '<h2>Label</h2>'
+          },
+          {coords:{lat:29.783343,lng:-95.414085}},
+          {coords:{lat:29.782956, lng:-95.413085}}
+        ];
+        for (var i = 0; i < markers.length; i++){
+          addMarker(markers[i])
+        }
+        <%# adds existing markers to map %>
+        function addMarker(props){
+          var marker = new google.maps.Marker({
+            position:props.coords,
+            map:map,
+          });
+          if (props.iconImage){
+            marker.setIcon(props.iconImage);
+          }
+
+          if (props.content){
+            var infoWindow = new google.maps.InfoWindow({
+              content: props.content
+            });
+            marker.addListener('click', function(){
+              infoWindow.open(map, marker);
+            })
+          }
+        }
+
+        <%# adds new marker to map %>
+        function placeMarker(props){
+          if (!newMarker || !newMarker.setPosition){
+            newMarker = new google.maps.Marker({
+              position:props.coords,
+              map:map
+            });
+            if (props.iconImage){
+              newMarker.setIcon(props.iconImage)
+            }
+            var infoWindow = new google.maps.InfoWindow({
+              content: "<form>goes here</form>"
+            });
+            newMarker.addListener('click', function(){
+              infoWindow.open(map, newMarker)
+            });
+            newMarker.addListener('dblclick', function(){
+              newMarker = null
+            })
+          } else {
+            newMarker.setPosition(props.coords);
+          }
+        }
       }
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCebAaDlrHdqEjMeUEnFJ8sCjsSp5ORNVk&callback=initMap" async defer></script>

@@ -1,0 +1,23 @@
+<script>var image0 = {
+  url: <% if (posts[0].img.path) {
+        if (!posts[0].img.converted) {%>
+          "data:image/<%=posts[0].img.contentType%>;base64,<%=posts[0].img.data.toString('base64')%>"
+        <% } else {%>
+          "<%=posts[0].img.path.slice(6)%>.png"
+        <% } %>
+      <% } %>,
+  size: new google.maps.Size(50, 50),
+  scaledSize: new google.maps.Size(25, 25)
+};
+var marker = new google.maps.Marker({
+  position: {lat:29.7794844512672,lng:-95.41349265301973},
+  map: map,
+  // icon: image0
+});
+var infoWindow = new google.maps.InfoWindow({
+  content: '<h2>Have you seen Buddy?</h2>'
+});
+marker.addListener('click', function(){
+  infoWindow.open(map, marker);
+})
+</script>

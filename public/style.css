@@ -194,6 +194,7 @@ textarea {
 }
 
 #map {
-  height:calc( 100% - 2em - 8px );
+  height:calc( 100% - 2em - 3vmin );
   width:100%;
+  color:black;
 }
