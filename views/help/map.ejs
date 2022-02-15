@@ -32,7 +32,7 @@
                   "<%=posts[0].img.path.slice(6)%>.png"
                 <% } %>
               <% } %>,
-          size: new google.maps.Size(50, 50),
+          size: new google.maps.Size(25, 25),
           scaledSize: new google.maps.Size(25, 25)
         };
         var markers = [
@@ -74,17 +74,27 @@
               position:props.coords,
               map:map
             });
+            newMarker.setDraggable(true)
             if (props.iconImage){
               newMarker.setIcon(props.iconImage)
             }
             var infoWindow = new google.maps.InfoWindow({
-              content: "<form>goes here</form>"
+              content: `<form action="/help/new" method="POST">
+                          <input type="text" name="coords" value="` + props.coords + `" hidden>
+                          <h3>Create Post at this location?</h3>
+                          <div id="map-button-bar">
+                            <a href="/help" class="btn btn-secondary">Cancel</a>
+                            <input type="submit" class="btn btn-success" value="Yes">
+                          </div>
+                        </form>`
+                        <%#<a href="/help/new"><button class="btn btn-primary">Post</button></a>%>
             });
+            infoWindow.open(map, newMarker)
             newMarker.addListener('click', function(){
               infoWindow.open(map, newMarker)
             });
             newMarker.addListener('dblclick', function(){
-              newMarker = null
+              newMarker = {}
             })
           } else {
             newMarker.setPosition(props.coords);

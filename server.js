@@ -344,62 +344,60 @@ app.get('/help/map', (req, res) => {
   })
 })
 
-//New: /help/new
+//New: /help/new takes you to map to select coords
 app.get('/help/new', (req, res) => {
-  res.render('./help/new.ejs',
+  res.render('./help/new-map.ejs',
     {
-      title: 'Lost & Found | Add',
-      // radioMessage: '',
-      // radioType: () => {
-      //  let radioMessage
-      //  if (document.getElementById('lost').checked) {
-      //      radioMessage = 'Please share as much detail as possible about your pet and where it was last seen.'
-      //    } else {
-      //      readioMessage = 'Please share as much detail as possible aobut the pet and where it was found.'
-      //    }
-      //    return radioMessage
-      //  }
+      title: 'Lost & Found | Add Location'
     })
 })
+
+//Still New: /help/new opens new form page and brings coords with it
+app.post('/help/new', (req, res) => {
+  res.render('./help/new.ejs',
+    {
+      title: 'Lost & Found | Add Info',
+      coords: req.body.coords
+    })
+})
+
+
 // Got Image handling here: https://www.geeksforgeeks.org/upload-and-retrieve-image-on-mongodb-using-mongoose/
 // Got HEIC handling here: https://www.npmjs.com/package/heic-convert
 //Create: /help
 app.post('/help', upload.single('img'), (req, res, next) => {
-  let shareObj = undefined
+  const shareObj = {
+    title: req.body.title,
+    content: req.body.content,
+    type: req.body.type,
+    markers: [
+      {coords: req.body.coords}
+    ]
+  }
   if (req.file) {
-    let mimeShare = req.file.mimetype
-    shareObj = {
-      title: req.body.title,
-      content: req.body.content,
-      type: req.body.type,
-      img: {
-        data: fs.readFileSync(path.join('./public/uploads/' + req.file.filename)),
-        contentType: mimeShare,
-        path: req.file.path
-      }
-    }
-    if (mimeShare === 'image/heic'){
+    shareObj.img = {data: undefined, contentType: '', path: '', converted: undefined}
+    if (req.file.mimetype === 'image/heic'){
       //run convert on data and update mimeShare
-      console.log('If HEIC hit');
       (async () => {
         const inputBuffer = await promisify(fs.readFile)(path.join('./public/uploads/' + req.file.filename))
-        const outputBuffer = await convert({
+        var outputBuffer = await convert({
           buffer: inputBuffer,
           format: 'PNG'
         })
 
-        await promisify(fs.writeFile)(shareObj.img.path + '.png', outputBuffer)
-        shareObj.img.data = outputBuffer
-        fs.unlink(shareObj.img.path, () => {})
+        await promisify(fs.writeFile)(req.file.path + '.png', outputBuffer)
+
+        fs.unlink(req.file.path, () => {})
       })()
-      shareObj.img.converted = true
       shareObj.img.contentType = 'image/png'
-    }
-  } else {
-    shareObj = {
-      title: req.body.title,
-      content: req.body.content,
-      type: req.body.type
+      shareObj.img.path = req.file.path
+      shareObj.img.converted = true
+    } else {
+      shareObj.img = {
+        data: fs.readFileSync(path.join('./public/uploads/' + req.file.filename)),
+        contentType: req.file.mimetype,
+        path: req.file.path
+      }
     }
   }
   Post.create(shareObj, (err, post) => {

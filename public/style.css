@@ -34,6 +34,16 @@ body {
     max-width:400px;
 }
 
+#map-button-bar {
+  display:flex;
+  flex-flow:row nowrap;
+  justify-content: space-between;
+  align-items: center;
+  width:100%;
+  margin:0;
+  padding:0;
+}
+
 ul {
   margin:0;
   padding:0;
@@ -151,6 +161,10 @@ input {
   margin: 10px 10px 10px 30px;
 }
 
+#radio-select div {
+  display:inline-block;
+}
+
 #title {
   width: 80vw;
   max-width:1000px;
@@ -188,7 +202,7 @@ textarea {
 }
 
 #map-link {
-  position:absolute;
+  position:fixed;
   right:10px;
   bottom:100px;
 }
