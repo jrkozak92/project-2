@@ -10,6 +10,7 @@
         <a href="/share" class="btn btn-primary">Go Home</a>
       </div>
       <div id="card-container">
+        <h2><%= share.title %></h2>
         <% if (share.img.path) {
           if (!share.img.converted) {%>
             <img src="data:image/<%=share.img.contentType%>;base64,<%=share.img.data.toString('base64')%>">
@@ -17,12 +18,19 @@
             <img src="<%=share.img.path.slice(6)%>.png">
           <% } %>
         <% } %>
-        <%= share.title %><br/>
-        <%= share.content %>
+
+        <p class="share-content">
+          <%= share.content %>
+        </p>
         <% share.comments.forEach((comment) => { %>
           <div class="comment-container">
-            <p>On <%= comment.date %></p>
-            <p> <%= comment.text %></p>
+            <div class="comment-info">
+              <p class="timestamp"><%= comment.date %></p>
+              <form class="single-button-form" action="/help/<%=post.id%>/comment/<%=comment.id%>?_method=DELETE" method="POST">
+                <input type="submit" id="button-form" class="btn btn-danger" value="Remove">
+              </form>
+            </div>
+            <p class="comment-text"> <%= comment.text %></p>
           </div>
         <% }) %>
       </div>

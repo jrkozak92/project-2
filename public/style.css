@@ -25,7 +25,7 @@ body {
   margin-bottom:3vmin;
 }
 
-#top-bar > * {
+#top-bar > *, #button-bar > *, #button-bar > * > * {
   margin:0;
 }
 
@@ -253,4 +253,45 @@ figcaption {
 .pop-up-button {
   display:block;
   margin:10px auto;
+}
+
+.lf-post-content, .share-content {
+  align-self: flex-start;
+}
+
+.comment-container {
+  width:100%;
+
+  border:1px solid black;
+  border-radius:5px;
+}
+
+.timestamp {
+  display:inline-block;
+  margin:0;
+}
+
+.single-button-form {
+  display:inline-block;
+}
+
+.comment-container #button-form {
+  font-size:.75em;
+  padding:.25em .5em;
+}
+
+.comment-info {
+  display:flex;
+  flex-flow:row nowrap;
+  justify-content: space-between;
+  align-items: center;
+  width:100%;
+  background-color:rgba(0,0,0,0.2);
+  padding:5px;
+}
+
+.comment-text {
+  margin-top:5px;
+  margin-left:5px;
+
 }

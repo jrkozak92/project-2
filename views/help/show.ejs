@@ -10,7 +10,7 @@
         <a href="/help" class="btn btn-primary">Go Home</a>
       </div>
       <div id="card-container">
-        <h1><%= post.title %> | <%= post.type.charAt(0).toUpperCase() + post.type.slice(1)%></h1>
+        <h2><%= post.type.charAt(0).toUpperCase() + post.type.slice(1)%> | <%= post.title.charAt(0).toUpperCase() + post.title.slice(1)%></h2>
         <% if (post.img.path) {
           if (!post.img.converted) {%>
             <img src="data:image/<%=post.img.contentType%>;base64,<%=post.img.data.toString('base64')%>">
@@ -18,17 +18,19 @@
             <img src="<%=post.img.path.slice(6)%>.png">
           <% } %>
         <% } %>
-        <p>
+        <p class="lf-post-content">
           <%= post.content %>
         </p>
 
         <% post.comments.forEach((comment) => { %>
           <div class="comment-container">
-            <p>On <%= comment.date %></p>
-            <p> <%= comment.text %></p>
-            <form action="/help/<%=post.id%>/comment/<%=comment.id%>?_method=DELETE" method="POST">
-              <input type="submit" id="button-form" class="btn btn-danger" value="Delete">
-            </form>
+            <div class="comment-info">
+              <p class="timestamp"><%= comment.date %></p>
+              <form class="single-button-form" action="/help/<%=post.id%>/comment/<%=comment.id%>?_method=DELETE" method="POST">
+                <input type="submit" id="button-form" class="btn btn-danger" value="Remove">
+              </form>
+            </div>
+            <p class="comment-text"> <%= comment.text %></p>
           </div>
         <% }) %>
       </div>

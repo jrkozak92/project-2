@@ -309,7 +309,6 @@ app.delete('/share/:id', (req, res) => {
   })
 })
 
-
 //___________________
 //  Help
 //___________________
@@ -533,9 +532,6 @@ app.delete('/help/:id/comment/:commentId', (req, res) => {
     removeComment()
   })
 })
-
-
-
 
 //___________________
 //Listener
