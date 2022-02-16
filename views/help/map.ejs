@@ -13,12 +13,24 @@
     <script>
       var map;
       var newMarker;
+      var currentLocation = {lat:29.7604, lng:-95.3698};
+      if (navigator.geolocation){
+        navigator.geolocation.getCurrentPosition(function(position){
+          console.log(position.coords);
+          
+          console.log(currentLocation);
+        },
+        function(error){
+          console.log(error);
+        })
+      };
       function initMap(){
         map = new google.maps.Map(document.getElementById('map'),
         {
           zoom: 12,
-          center: {lat:29.7604, lng:-95.3698}
+          center: currentLocation
         });
+
         <%# Inspired by: https://stackoverflow.com/questions/34827994/how-to-get-only-one-marker-in-the-google-maps-api-with-javascript?rq=1 %>
         google.maps.event.addListener(map, 'click', function(event){
           placeMarker({coords: event.latLng});

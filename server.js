@@ -393,12 +393,13 @@ app.post('/help', upload.single('img'), (req, res, next) => {
         })
 
         await promisify(fs.writeFile)(req.file.path + '.png', outputBuffer)
-
         fs.unlink(req.file.path, () => {})
+
       })()
       shareObj.img.contentType = 'image/png'
       shareObj.img.path = req.file.path
       shareObj.img.converted = true
+
     } else {
       shareObj.img = {
         data: fs.readFileSync(path.join('./public/uploads/' + req.file.filename)),
