@@ -6,10 +6,10 @@
   <body>
     <div class="container-fluid">
       <div id="top-bar">
-        <h1>Tracker Task: <%=task.name%></h1>
+        <h1><%=task.name%></h1>
         <a href="/tracker" class="btn btn-primary">Go Home</a>
       </div>
-      <p>Complete?: <%= task.status %></p>
+      <p>Status: <% if (task.status){%> Done! <%} else {%> Not Done... <% } %></p>
       <p>Notes: <%= task.notes %></p>
       <div id="button-bar">
         <form action="/tracker/<%=task.id%>?_method=DELETE" method="POST">
