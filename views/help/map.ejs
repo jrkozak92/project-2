@@ -16,12 +16,10 @@
       var currentLocation = {lat:29.7604, lng:-95.3698};
       if (navigator.geolocation){
         navigator.geolocation.getCurrentPosition(function(position){
-          console.log(position.coords);
           currentLocation = {
             lat: position.coords.latitude,
             lng: position.coords.longitude
           }
-          console.log(currentLocation);
         },
         function(error){
           console.log(error);
@@ -105,28 +103,24 @@
               map:map
             });
             newMarker.setDraggable(true)
-            if (props.iconImage){
-              newMarker.setIcon(props.iconImage)
-            }
             var infoWindow = new google.maps.InfoWindow({
               content: `<form action="/help/new" method="POST">
                           <input type="text" name="coords" value="` + props.coords + `" hidden>
                           <h3>Create Post at this location?</h3>
                           <div id="map-button-bar">
-                            <a href="/help" class="btn btn-secondary">Cancel</a>
+                            <a href="#" id="cancel-button" class="btn btn-secondary" onclick="newMarker.setMap(null)">Cancel</a>
                             <input type="submit" class="btn btn-success" value="Yes">
                           </div>
                         </form>`
-                        <%#<a href="/help/new"><button class="btn btn-primary">Post</button></a>%>
+                        <%#<a href="/help/new"><button class="btn btn-primary">Post</button></a>%>,
+              anchor: newMarker
             });
             infoWindow.open(map, newMarker)
             newMarker.addListener('click', function(){
               infoWindow.open(map, newMarker)
             });
-            newMarker.addListener('dblclick', function(){
-              newMarker = {}
-            })
           } else {
+            newMarker.setMap(map);
             newMarker.setPosition(props.coords);
           }
         }
