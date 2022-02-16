@@ -13,6 +13,11 @@ const postSchema = new mongoose.Schema({
   comments: [
     {text: String,
     date: String}
+  ],
+  markers: [
+    {
+      coords: {lat: {type:Number, required:true}, lng: {type:Number, required:true}}
+    }
   ]
 })
 

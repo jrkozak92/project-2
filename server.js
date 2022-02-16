@@ -366,6 +366,13 @@ app.post('/help/new', (req, res) => {
 // Got HEIC handling here: https://www.npmjs.com/package/heic-convert
 //Create: /help
 app.post('/help', upload.single('img'), (req, res, next) => {
+  const coordsArray = req.body.coords.split(', ')
+  coordsArray[0] = coordsArray[0].slice(1)
+  coordsArray[1] = coordsArray[1].slice(0,-1)
+  const lat = Number(coordsArray.slice(0,1))
+  const lng = Number(coordsArray.slice(-1))
+  req.body.coords = {lat, lng}
+
   const shareObj = {
     title: req.body.title,
     content: req.body.content,
