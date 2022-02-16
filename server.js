@@ -179,21 +179,14 @@ app.get('/share/new', (req, res) => {
 // Got HEIC handling here: https://www.npmjs.com/package/heic-convert
 //Create: /share
 app.post('/share', upload.single('img'), (req, res, next) => {
-  let shareObj = undefined
+  let shareObj = {
+    title: req.body.title,
+    content: req.body.content
+  }
   if (req.file) {
-    let mimeShare = req.file.mimetype
-    shareObj = {
-      title: req.body.title,
-      content: req.body.content,
-      img: {
-        data: fs.readFileSync(path.join('./public/uploads/' + req.file.filename)),
-        contentType: mimeShare,
-        path: req.file.path
-      }
-    }
-    if (mimeShare === 'image/heic'){
-      //run convert on data and update mimeShare
-      console.log('If HEIC hit');
+    shareObj.img = {data: undefined, contentType: '', path: '', converted: undefined}
+    if (req.file.mimetype === 'image/heic'){
+      //run convert on data and update mimetype
       (async () => {
         const inputBuffer = await promisify(fs.readFile)(path.join('./public/uploads/' + req.file.filename))
         const outputBuffer = await convert({
@@ -202,18 +195,20 @@ app.post('/share', upload.single('img'), (req, res, next) => {
         })
 
         await promisify(fs.writeFile)(shareObj.img.path + '.png', outputBuffer)
-        shareObj.img.data = outputBuffer
         fs.unlink(shareObj.img.path, () => {})
       })()
       shareObj.img.converted = true
+      shareObj.img.path = req.file.path
       shareObj.img.contentType = 'image/png'
     }
   } else {
-    shareObj = {
-      title: req.body.title,
-      content: req.body.content
+    shareObj.img = {
+      data: fs.readFileSync(path.join('./public/uploads/' + req.file.filename)),
+      contentType: mimeShare,
+      path: req.file.path
     }
   }
+
   Share.create(shareObj, (err, share) => {
     res.redirect('/share')
   })
@@ -245,21 +240,15 @@ app.get('/share/:id/edit', (req, res) => {
 
 //Update: /share/:id
 app.put('/share/:id', upload.single('img'), (req, res) => {
-  let shareObj = undefined
+  let shareObj = {
+    title: req.body.title,
+    content: req.body.content
+  }
   let imgMod = false
   if (req.file) {
-    let mimeShare = req.file.mimetype
-    shareObj = {
-      title: req.body.title,
-      content: req.body.content,
-      img: {
-        data: fs.readFileSync(path.join('./public/uploads/' + req.file.filename)),
-        contentType: mimeShare,
-        path: req.file.path,
-        converted:false
-      }
-    }
-    if (mimeShare === 'image/heic'){
+    imgMod = true
+    shareObj.img = {data: undefined, contentType: '', path: '', converted: undefined}
+    if (req.file.mimetype === 'image/heic'){
       //run convert on data and update mimeShare
       (async () => {
         const inputBuffer = await promisify(fs.readFile)(path.join('./public/uploads/' + req.file.filename))
@@ -269,16 +258,18 @@ app.put('/share/:id', upload.single('img'), (req, res) => {
         })
 
         await promisify(fs.writeFile)(shareObj.img.path + '.png', outputBuffer)
-        shareObj.img.data = outputBuffer
         fs.unlink(shareObj.img.path, () => {})
       })()
       shareObj.img.converted = true
       shareObj.img.contentType = 'image/png'
-    }
-  } else {
-    shareObj = {
-      title: req.body.title,
-      content: req.body.content
+      shareObj.img.path = req.file.path
+    } else {
+      shareObj.img = {
+        data: fs.readFileSync(path.join('./public/uploads/' + req.file.filename)),
+        contentType: req.file.mimetype,
+        path: req.file.path,
+        converted:false
+      }
     }
   }
   // This handles all cases except removing an image and converting to text-only
@@ -394,7 +385,6 @@ app.post('/help', upload.single('img'), (req, res, next) => {
 
         await promisify(fs.writeFile)(req.file.path + '.png', outputBuffer)
         fs.unlink(req.file.path, () => {})
-
       })()
       shareObj.img.contentType = 'image/png'
       shareObj.img.path = req.file.path
@@ -461,24 +451,17 @@ app.put('/help/:id/addComment', (req, res) => {
 
 //Update: /help/:id
 app.put('/help/:id', upload.single('img'), (req, res) => {
-  let shareObj = undefined
+  let shareObj = {
+    title: req.body.title,
+    content: req.body.content,
+    type: req.body.type
+  }
   let imgMod = false
   if (req.file) {
     imgMod = true
-    let mimeShare = req.file.mimetype
-    shareObj = {
-      title: req.body.title,
-      content: req.body.content,
-      type: req.body.type,
-      img: {
-        data: fs.readFileSync(path.join('./public/uploads/' + req.file.filename)),
-        contentType: mimeShare,
-        path: req.file.path,
-        converted:false
-      }
-    }
-    if (mimeShare === 'image/heic'){
-      //run convert on data and update mimeShare
+    shareObj.img = {data: undefined, contentType: '', path: '', converted: undefined}
+    if (req.file.mimetype === 'image/heic'){
+      //run convert on data and update mimetype
       (async () => {
         const inputBuffer = await promisify(fs.readFile)(path.join('./public/uploads/' + req.file.filename))
         const outputBuffer = await convert({
@@ -487,17 +470,18 @@ app.put('/help/:id', upload.single('img'), (req, res) => {
         })
 
         await promisify(fs.writeFile)(shareObj.img.path + '.png', outputBuffer)
-        shareObj.img.data = outputBuffer
         fs.unlink(shareObj.img.path, () => {})
       })()
       shareObj.img.converted = true
+      shareObj.img.path = req.file.path
       shareObj.img.contentType = 'image/png'
-    }
-  } else {
-    shareObj = {
-      title: req.body.title,
-      content: req.body.content,
-      type: req.body.type
+    } else {
+      shareObj.img = {
+        data: fs.readFileSync(path.join('./public/uploads/' + req.file.filename)),
+        contentType: req.file.mimetype,
+        path: req.file.path,
+        converted:false
+      }
     }
   }
   // This handles all cases except removing an image and converting to text-only
