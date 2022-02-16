@@ -16,7 +16,7 @@
       <% for ( let i = 0; i < posts.length; i++){ %>
         <a href="/help/<%=posts[i].id%>" class="post-link">
             <figure class="card <% if (posts[i].type === "lost"){%>lost<%} else {%>found<%}%>">
-              <%= posts[i].type.charAt(0).toUpperCase() + posts[i].type.slice(1)%>
+              <p class="lf-title"><%= posts[i].type.charAt(0).toUpperCase() + posts[i].type.slice(1)%> | <%= posts[i].title %></p>
               <% if (posts[i].img.path) {
                 if (!posts[i].img.converted) {%>
                   <img src="data:image/<%=posts[i].img.contentType%>;base64,<%=posts[i].img.data.toString('base64')%>">
@@ -25,7 +25,6 @@
                 <% } %>
               <% } %>
               <figcaption>
-                <%= posts[i].title %><br/>
                 <%=posts[i].content%>
               </figcaption>
             </figure>

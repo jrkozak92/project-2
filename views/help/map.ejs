@@ -34,22 +34,22 @@
                   <% } else {%>
                     "<%=posts[0].img.path.slice(6)%>.png"
                   <% } %>,
-              size: new google.maps.Size(25, 25),
-              scaledSize: new google.maps.Size(25, 25)
+              size: new google.maps.Size(50, 50),
+              scaledSize: new google.maps.Size(50, 50)
             };
           <% } %>
           <% for (let j = 0; j < posts[i].markers.length; j++){%>
             jObj = {
               coords: <%=posts[i].markers[j].coords%>,
-              content: `<h6><%=posts[i].type%> | <%=posts[i].title%></h6>
+              content: `<h6 class="pop-up-title"><%= posts[i].type.charAt(0).toUpperCase() + posts[i].type.slice(1)%> | <%= posts[i].title.charAt(0).toUpperCase() + posts[i].title.slice(1)%></h6>
                         <% if (posts[i].img.path){%>
-                          <img src=<% if (!posts[i].img.converted) {%>
+                          <img class="pop-up-img" src=<% if (!posts[i].img.converted) {%>
                                 "data:image/<%=posts[i].img.contentType%>;base64,<%=posts[i].img.data.toString('base64')%>"
                               <% } else {%>
                                 "<%=posts[0].img.path.slice(6)%>.png"
                               <% } %>/>
                         <%}%>
-                        <a href="/help/<%=posts[i].id%>" class="btn btn-primary">See Post</a>`
+                        <a href="/help/<%=posts[i].id%>" class="btn btn-primary pop-up-button">See Post</a>`
             } %>
             <% if (posts[i].img.path){ %>
               jObj.iconImage = image<%=i%>

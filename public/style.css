@@ -191,6 +191,27 @@ textarea {
   min-width:0;
   width:88vw;
   max-width:900px;
+  margin:0 auto;
+  border:1px solid black;
+}
+
+a {
+  text-decoration: none;
+}
+
+#card-container a {
+  flex:1 1;
+  width:calc( 88vw + 2px );
+  max-width:900px;
+  color:white;
+  font-weight:bold;
+  text-align: center;
+  text-shadow:1px 1px #60463B, -1px 1px #60463B, 1px -1px #60463B, -1px -1px #60463B;
+}
+
+.card {
+
+  box-shadow:
 }
 
 .lost{
@@ -201,14 +222,35 @@ textarea {
   background-color:#F9C784;
 }
 
+figcaption {
+  text-align:left;
+  padding: 10px;
+}
+
 #map-link {
   position:fixed;
+  color:white;
   right:10px;
   bottom:100px;
+    text-shadow:1px 1px #60463B, -1px 1px #60463B, 1px -1px #60463B, -1px -1px #60463B;
 }
 
 #map {
   height:calc( 100% - 2em - 3vmin );
   width:100%;
   color:black;
+}
+
+.pop-up-title {
+  text-align:center;
+}
+
+.pop-up-img {
+  min-width:0px;
+  width:100%;
+}
+
+.pop-up-button {
+  display:block;
+  margin:10px auto;
 }
