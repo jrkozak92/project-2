@@ -172,8 +172,19 @@ app.get('/share', (req, res) => {
 app.get('/share/new', (req, res) => {
   res.render('./share/new.ejs',
     {
-      title: 'Share | Add'
+      title: 'Share | Add',
+      tasks: undefined
     })
+})
+
+//New from Tracker
+app.get('/tracker/:id/share', (req, res) => {
+  Task.findById(req.params.id, (err, task) => {
+    res.render('./share/new.ejs',{
+      title: 'Share | Add',
+      task: task
+    })
+  })
 })
 // Got Image handling here: https://www.geeksforgeeks.org/upload-and-retrieve-image-on-mongodb-using-mongoose/
 // Got HEIC handling here: https://www.npmjs.com/package/heic-convert

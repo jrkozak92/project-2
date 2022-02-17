@@ -15,6 +15,9 @@
         <form action="/tracker/<%=task.id%>?_method=DELETE" method="POST">
           <input type="submit" class="btn btn-danger" value="Delete">
         </form>
+        <% if (task.status){%>
+          <a href="/tracker/<%=task.id%>/share" class="btn btn-success">Share it!</a>
+        <% } %>
         <a href="/tracker/<%=task.id%>/edit" class="btn btn-warning">Edit</a>
       </div>
     </div>

@@ -7,7 +7,13 @@
     <div class="container-fluid">
       <h1>Create a New Share</h1>
       <form action="/share" method="POST" enctype="multipart/form-data">
-        <input type="text" id="title" name="title" placeholder="Title" required><br/>
+        <input type="text" id="title" name="title"
+        <% if (task){ %>
+          value="<%=task.name%>"
+        <% } else { %>
+          placeholder="Title"
+        <% } %>
+        required><br/>
         <textarea name="content" placeholder="What would you like to share?"></textarea>
         <label for="img">Want to share an image?</label>
         <input type="file" class="form-control" name="img" value="">
