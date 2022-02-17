@@ -119,45 +119,64 @@ nav {
 }
 
 .task-link {
+  width:100%;
   text-decoration:none;
   color:white;
 }
 
-.task-link:hover {
+.task-link:hover, .task:hover, .task-complete:hover {
   color:whitesmoke;
   text-shadow:1px 1px rgb(100,100,100);
 }
 
-.task {
-  list-style: inside circle;
+
+.task, .task-complete {
+  display:flex;
+  flex-flow: row nowrap;
+  justify-content: flex-start;
+  align-items: center;
+  gap:1em;
+  width:100%;
   margin:5px 0;
-  padding:5px;
-  box-shadow:3px 3px 1px white;
+  padding:10px;
   border-radius:5px;
 }
 
+.task {
+  box-shadow:3px 3px 1px white;
+}
+
 .task-complete {
-  list-style: inside disc;
   background-color:rgba(255,255,255,.1);
-  margin:5px 0;
-  padding:5px;
   box-shadow:1px 1px 1px white;
-  border-radius:5px;
+}
+
+.task-ball, .task-ball-complete {
+  min-width:1em;
+  width:1em;
+  height:1em;
+  border:2px solid white;
+  border-radius:50%;
+}
+
+.task-ball-complete {
+  background-color:rgba(249,199,132,1)
 }
 
 .list-flex {
   float:right;
   display:flex;
-  flex-flow:row nowrap;
+  flex-flow:column nowrap;
   justify-content: flex-start;
   align-items: baseline;
   font-weight:bold;
   min-width:0;
-  width:90%;
 }
 /* Found this at https://www.w3docs.com/snippets/css/how-to-limit-the-text-length-to-one-line-with-css.html#:~:text=If%20you%20want%20to%20limit,be%20signalled%20to%20the%20user. */
 .task-note {
   display:inline-block;
+  min-width:0;
+  max-width:100%;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

@@ -200,12 +200,12 @@ app.post('/share', upload.single('img'), (req, res, next) => {
       shareObj.img.converted = true
       shareObj.img.path = req.file.path
       shareObj.img.contentType = 'image/png'
-    }
-  } else {
-    shareObj.img = {
-      data: fs.readFileSync(path.join('./public/uploads/' + req.file.filename)),
-      contentType: mimeShare,
-      path: req.file.path
+    } else {
+      shareObj.img = {
+        data: fs.readFileSync(path.join('./public/uploads/' + req.file.filename)),
+        contentType: req.file.mimetype,
+        path: req.file.path
+      }
     }
   }
 

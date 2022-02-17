@@ -12,18 +12,17 @@
       <% if (tasks.length === 0){ %>
           <p>There's nothing here...</p>
       <% } %>
-      <ul>
-        <% for ( let i = 0; i < tasks.length; i++){ %>
-          <a href="/tracker/<%=tasks[i].id%>" class="task-link">
-            <li class="task<% if (tasks[i].status){%>-complete<%}%>">
-              <div class="list-flex">
-                <%= tasks[i].name %>
-                <div class="task-note"><%=tasks[i].notes%></div>
-              </div>
-            </li>
-          </a>
-        <% } %>
-      </ul>
+      <% for ( let i = 0; i < tasks.length; i++){ %>
+        <a href="/tracker/<%=tasks[i].id%>" class="task-link">
+          <div class="task<% if (tasks[i].status){%>-complete<%}%>">
+            <div class="task-ball<% if (tasks[i].status){%>-complete<%}%>"></div>
+            <div class="list-flex">
+              <div class="task-title"><%= tasks[i].name %></div>
+              <div class="task-note"><%=tasks[i].notes%></div>
+            </div>
+          </div>
+        </a>
+      <% } %>
     </div>
     <nav>
       <ul id="nav-list">
