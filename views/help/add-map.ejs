@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <%- include('../partials/head.ejs') %>
+  </head>
+  <body>
+    <div id="top-bar">
+      <h1>Sightings of <%=post.title%></h1>
+      <a href="/help/<%=post.id%>" class="btn btn-info">Back</a>
+    </div>
+    <div id="map"></div>
+    <!-- All Maps stuff comes from google's docs or this video: https://www.youtube.com/watch?v=Zxf1mnP5zcw&t=744s -->
+    <script>
+      var map;
+      var newMarker;
+      var currentLocation = {lat:29.7604, lng:-95.3698};
+      if (navigator.geolocation){
+        navigator.geolocation.getCurrentPosition(function(position){
+          currentLocation = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
+          }
+        },
+        function(error){
+          console.log(error);
+        })
+      };
+      function initMap(){
+        map = new google.maps.Map(document.getElementById('map'),
+        {
+          zoom: 12,
+          center: currentLocation
+        });
+
+        <%# Inspired by: https://stackoverflow.com/questions/34827994/how-to-get-only-one-marker-in-the-google-maps-api-with-javascript?rq=1 %>
+        google.maps.event.addListener(map, 'click', function(event){
+          placeMarker({coords: event.latLng});
+        });
+        var markers = [];
+        var eachMarker;
+        <% for (let i = 0; i < post.markers.length; i++){%>
+          eachMarker = {
+            coords: <%=post.markers[i].coords%>,
+          } %>
+
+          markers.push(eachMarker)
+        <% } %>
+
+        for (var i = 0; i < markers.length; i++){
+          addMarker(markers[i])
+        }
+        <%# adds existing markers to map %>
+        function addMarker(props){
+          var marker = new google.maps.Marker({
+            position:props.coords,
+            map:map,
+          });
+          if (props.iconImage){
+            marker.setIcon(props.iconImage);
+          }
+
+          if (props.content){
+            var infoWindow = new google.maps.InfoWindow({
+              content: props.content
+            });
+            marker.addListener('click', function(){
+              infoWindow.open(map, marker);
+            })
+          }
+        }
+
+        <%# adds new marker to map %>
+        function placeMarker(props){
+          if (!newMarker || !newMarker.setPosition){
+            newMarker = new google.maps.Marker({
+              position:props.coords,
+              map:map
+            });
+            newMarker.setDraggable(true)
+            var infoWindow = new google.maps.InfoWindow({
+              content: `<form action="/help/<%=post.id%>/sightings?_method=PUT" method="POST">
+                          <input type="text" name="coords" value="` + props.coords + `" hidden>
+                          <h3>Add Sighting at this location?</h3>
+                          <input type="text" class="add-map-note" name="note" placeholder="Notes">
+                          <div id="map-button-bar">
+                            <a href="#" id="cancel-button" class="btn btn-secondary" onclick="newMarker.setMap(null)">Cancel</a>
+                            <input type="submit" class="btn btn-success" value="Add">
+                          </div>
+                        </form>`,
+              anchor: newMarker
+            });
+            infoWindow.open(map, newMarker)
+            newMarker.addListener('click', function(){
+              infoWindow.open(map, newMarker)
+            });
+          } else {
+            newMarker.setMap(map);
+            newMarker.setPosition(props.coords);
+          }
+        }
+      }
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCebAaDlrHdqEjMeUEnFJ8sCjsSp5ORNVk&callback=initMap" async defer></script>
+  </body>
+</html>

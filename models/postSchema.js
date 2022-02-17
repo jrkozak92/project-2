@@ -16,7 +16,8 @@ const postSchema = new mongoose.Schema({
   ],
   markers: [
     {
-      coords: {lat: {type:Number, required:true}, lng: {type:Number, required:true}}
+      coords: {lat: {type:Number, required:true}, lng: {type:Number, required:true}},
+      note: String
     }
   ]
 })

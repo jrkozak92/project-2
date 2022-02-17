@@ -448,6 +448,29 @@ app.put('/help/:id/addComment', (req, res) => {
   })
 })
 
+app.get('/help/:id/sightings', (req, res) => {
+  Post.findById(req.params.id, (err, post) => {
+    res.render('./help/add-map.ejs',
+      {
+        title: ' Lost & Found | Sightings',
+        post: post
+      })
+  })
+})
+
+app.put('/help/:id/sightings', (req, res) => {
+  const coordsArray = req.body.coords.split(', ')
+  coordsArray[0] = coordsArray[0].slice(1)
+  coordsArray[1] = coordsArray[1].slice(0,-1)
+  const lat = Number(coordsArray.slice(0,1))
+  const lng = Number(coordsArray.slice(-1))
+  req.body.coords = {lat, lng}
+  let newSighting = {$push: {markers: {coords: req.body.coords, note: req.body.note}}}
+  Post.findByIdAndUpdate(req.params.id, newSighting, (err, update) => {
+    res.redirect('/help/' + req.params.id)
+  })
+})
+
 //Update: /help/:id
 app.put('/help/:id', upload.single('img'), (req, res) => {
   let shareObj = {

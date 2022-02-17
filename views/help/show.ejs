@@ -21,7 +21,7 @@
         <p class="lf-post-content">
           <%= post.content %>
         </p>
-
+        <a href="/help/<%=post.id%>/sightings" class="btn btn-success">I've seen this pet!</a>
         <% post.comments.forEach((comment) => { %>
           <div class="comment-container">
             <div class="comment-info">
