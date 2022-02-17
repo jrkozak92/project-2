@@ -205,13 +205,19 @@ input {
 }
 
 #title {
-  width: 80vw;
+  width: 88vw;
   max-width:1000px;
 }
 
 textarea {
-  width:80vw;
+  width:88vw;
   height:5em;
+  max-width:1000px;
+  margin:10px;
+}
+
+.form-control {
+  width:88vw;
   max-width:1000px;
   margin:10px;
 }
@@ -249,8 +255,9 @@ a {
 }
 
 .card {
-
-  box-shadow:
+  background-color: rgba(46,49,56,1);
+  box-shadow:3px 3px black;
+  border:1px solid black;
 }
 
 .lost{
@@ -261,7 +268,22 @@ a {
   background-color:#F9C784;
 }
 
+.lf-title, .post-title {
+  font-size:20px;
+  margin:5px 0;
+  padding:0;
+}
+
 figcaption {
+  display:inline-block;
+  min-width:0;
+  max-width:100%;
+  min-height:2em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0 10px;
+  font-weight:normal;
   text-align:left;
   padding: 10px;
 }

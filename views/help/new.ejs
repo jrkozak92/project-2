@@ -8,7 +8,7 @@
       <h1>Create a New Post</h1>
       <form action="/help" method="POST" enctype="multipart/form-data">
         <input type="text" name="coords" value="<%=coords%>" hidden>
-        <input type="text" id="title" name="title" placeholder="Title" required><br/>
+        <input type="text" id="title" name="title" placeholder="Pet's Name or Age Guess & Sex" required><br/>
         <div id="radio-select">
           Type of Post:<br/>
           <div>
@@ -21,6 +21,7 @@
           </div>
         </div>
         <textarea class= "pet-info" name="content" placeholder="Please share as much detail as possible about the pet and where it was last seen."></textarea>
+        <label for="img">Please upload an image:</label>
         <input type="file" class="form-control" name="img" value="">
         <div id="button-bar">
           <a href="/help" class="btn btn-secondary">Cancel</a>
