@@ -10,7 +10,7 @@
         <a href="/tracker/new"><button class="btn btn-primary">Add Task</button></a>
       </div>
       <% if (tasks.length === 0){ %>
-          <p>There's nothing here...</p>
+          <p id="nothing-to-see">There's nothing here...</p>
       <% } %>
       <% for ( let i = 0; i < tasks.length; i++){ %>
         <a href="/tracker/<%=tasks[i].id%>" class="task-link">

@@ -368,3 +368,7 @@ figcaption {
 .long-button {
   margin:20px;
 }
+
+#nothing-to-see {
+  align-self:center;
+}
