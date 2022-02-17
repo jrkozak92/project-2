@@ -21,7 +21,7 @@
         <p class="lf-post-content">
           <%= post.content %>
         </p>
-        <a href="/help/<%=post.id%>/sightings" class="btn btn-success">I've seen this pet!</a>
+        <a href="/help/<%=post.id%>/sightings" class="btn btn-success long-button">I've seen this pet!</a>
         <% post.comments.forEach((comment) => { %>
           <div class="comment-container">
             <div class="comment-info">
@@ -41,6 +41,7 @@
         <a href="/help/<%=post.id%>/comment" class="btn btn-secondary">Add Comment</a>
         <a href="/help/<%=post.id%>/edit" class="btn btn-warning">Edit</a>
       </div>
+      <a href="/help/<%=post.id%>/sightings" id="map-link" class="btn btn-info">See Their Map</a>
     </div>
   </body>
 </html>

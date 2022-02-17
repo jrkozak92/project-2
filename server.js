@@ -368,7 +368,7 @@ app.post('/help', upload.single('img'), (req, res, next) => {
     content: req.body.content,
     type: req.body.type,
     markers: [
-      {coords: req.body.coords}
+      {coords: req.body.coords, note: 'First seen here'}
     ]
   }
   if (req.file) {

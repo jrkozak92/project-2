@@ -41,6 +41,7 @@
         <% for (let i = 0; i < post.markers.length; i++){%>
           eachMarker = {
             coords: <%=post.markers[i].coords%>,
+            content: `<h5><%=post.markers[i].note%></h5>`
           } %>
 
           markers.push(eachMarker)

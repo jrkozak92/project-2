@@ -21,6 +21,7 @@ body {
   flex-flow: row nowrap;
   justify-content: space-between;
   align-items: flex-end;
+  align-self:center;
   width:100%;
   margin-bottom:3vmin;
 }
@@ -324,6 +325,7 @@ figcaption {
 
 .lf-post-content, .share-content {
   align-self: flex-start;
+  margin: 20px;
 }
 
 .comment-container {
@@ -361,4 +363,8 @@ figcaption {
   margin-top:5px;
   margin-left:5px;
 
+}
+
+.long-button {
+  margin:20px;
 }
