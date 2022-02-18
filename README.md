@@ -21,7 +21,7 @@ util, heic-convert, fs, path
 heic-convert is an NPM package that converts the HEIC filetype to PNG or JPG, and uses Node's util, fs, and path packages to manage promises and file management. I attempted to use this package with HEIC images directly off MacBook's Photos app, but the storage requirements overfill Heroku and cause a server crash. Fortunately, iPhones automatically convert HEIC images to JPG when uploading, so the only issue arises in the exact use case I meant it to handle, which is something that would need more attention for production.
 
 ## Approach
-Mobile first, relied on bootstrap for responsiveness, simple design wireframed beforehand with full week schedule estimated day 1.
+MVC controlled, Mobile first designed, relied on bootstrap for responsiveness, simple design wireframed beforehand with full week schedule estimated day 1.
 Worked simplest to most complex. The point of the assignment was to create a RESTful CRUD app, and Tracker was the most straightforward starting point, so I built out a very bare-bones version including all RESTful routes before moving on to Share. Share & Lost & Found were very similar in functionality, with the exception of Google Maps, and were more or less built concurrently. Once the basics were taken care of, I moved to implementing Google Maps, which was time consuming, but easier than expected. Once Google Maps basics were implemented and functional, attention moved to nice to have functionality, creating links across the various disparate parts of the applciation, and polishing the styling.
 
 ## Unsolved Problems
