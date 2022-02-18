@@ -13,7 +13,7 @@
     <script>
       var map;
       var newMarker;
-      var currentLocation = {lat:29.7604, lng:-95.3698};
+      var currentLocation = <%=post.markers[0].coords%>;
       if (navigator.geolocation){
         navigator.geolocation.getCurrentPosition(function(position){
           currentLocation = {
@@ -29,7 +29,7 @@
         map = new google.maps.Map(document.getElementById('map'),
         {
           zoom: 12,
-          center: currentLocation
+          center: <%=post.markers[0].coords%>
         });
 
         <%# Inspired by: https://stackoverflow.com/questions/34827994/how-to-get-only-one-marker-in-the-google-maps-api-with-javascript?rq=1 %>
