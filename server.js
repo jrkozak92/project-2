@@ -173,7 +173,7 @@ app.get('/share/new', (req, res) => {
   res.render('./share/new.ejs',
     {
       title: 'Share | Add',
-      tasks: undefined
+      task: undefined
     })
 })
 
