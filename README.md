@@ -44,4 +44,6 @@ User Auth
 Google Maps
   Custom markers to highlight and better pinpoint locations of lost/found pets on the live map
   Single button directioins to a given marker's location would be cool
+Daily Resets/Handling for recurring events in Tracker
+  Seems like a very in-depth task while I was trying to keep it simple, and never got back around to it. I don't think it would be too demanding, just requries some forethought I didn't have time for.
   
